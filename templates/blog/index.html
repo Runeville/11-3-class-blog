@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <a href="{{ url_for('add_post') }}" class="btn btn-info">Hello</a>
+    </div>
+    <div class="col search">
+        <input class="ms-auto" type="button" value="Search">
+        <input class="ms-auto" type="text" placeholder="Search">
+    </div>
+</div>
+
+{% for post in posts %}
+<article>
+    <h2 class="text-center">{{ post['title'] }}</h2>
+    <p class="date"><i>Date: {{ post['date'] }}</i></p>
+    <p class="content">{{ post['content'] }}</p>
+    <p class="author">Author: {{ post['author'] }}</p>
+</article>
+{% endfor %}
+
+{% endblock %}

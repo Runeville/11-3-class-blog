@@ -1,0 +1,35 @@
+ /*  Navbar  */
+.navbar-brand {
+    margin-left: 7rem;
+}
+
+.navbar-nav {
+    margin-right: 10rem
+}
+
+ /*  Container  */
+.container {
+    margin-top: 100px;
+    max-width: 1000px;
+}
+
+ /*  Search posts  */
+.search {
+    position: relative;
+}
+.search input {
+    float:right
+}
+
+ /*  Posts  */
+article {
+    font-size: 1.3rem;
+}
+
+.date {
+    margin-left: 2rem;
+}
+
+.author {
+    color: gray;
+}
