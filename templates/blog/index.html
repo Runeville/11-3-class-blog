@@ -3,14 +3,14 @@
 {% block content %}
 <div class="row">
     <div class="col">
-        <a href="{{ url_for('add_post') }}" class="btn btn-info">Hello</a>
+        <a href="{{ url_for('add_post') }}" class="btn btn-info">Add new Post</a>
     </div>
     <div class="col search">
         <input class="ms-auto" type="button" value="Search">
         <input class="ms-auto" type="text" placeholder="Search">
     </div>
 </div>
-
+<br>
 {% for post in posts %}
 <article>
     <h2 class="text-center">{{ post['title'] }}</h2>
@@ -18,6 +18,7 @@
     <p class="content">{{ post['content'] }}</p>
     <p class="author">Author: {{ post['author'] }}</p>
 </article>
+<hr>
 {% endfor %}
 
 {% endblock %}
