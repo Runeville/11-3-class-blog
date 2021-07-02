@@ -1,10 +1,9 @@
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from __init__ import app
 
-app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///blog_database.db"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
