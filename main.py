@@ -1,4 +1,5 @@
 from flask import Flask, render_template, session, redirect, url_for
+from functools import wraps
 from flask_bootstrap import Bootstrap
 from db import *
 from auth import *
@@ -34,12 +35,17 @@ for post in get_posts:
 
 
 @app.route('/')
+@redirect_unauthorized
 def home():
+    # if current_user.is_active is False:
+    #     return redirect('/login')
     return render_template("blog/index.html", posts=posts)
 
 
 @app.route('/register', methods=["POST", "GET"])
 def register():
+    if current_user.is_active is True:
+        return redirect('/')
     register_form = RegisterForm()
 
     if register_form.validate_on_submit():  # Catching POST request
@@ -64,13 +70,16 @@ def register():
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
+    if current_user.is_active is True:
+        return redirect('/')
+
     login_form = LoginForm()
 
     if login_form.validate_on_submit():
         user = User.query.filter_by(login=login_form.login.data).first()  # user = user found by login in DB
         if check_password_hash(user.password, login_form.password.data):  # Check if password is correct
             login_user(user, remember=True)
-            return redirect(url_for("home"))
+            return redirect('/')
 
     return render_template("auth/login.html", form=login_form)
 

@@ -1,4 +1,5 @@
 from flask import redirect
+from functools import wraps
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length
@@ -17,3 +18,13 @@ class LoginForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
     submit = SubmitField("Sign in")
 
+
+def redirect_unauthorized(function):
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        function()
+        if current_user.is_active is False:
+            return redirect('/login')
+        else:
+            return function(*args, **kwargs)
+    return wrapper
