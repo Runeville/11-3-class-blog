@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-6">
+        <h4>Name:</h4>
+    </div>
+    <div class="col-3">
+        <h4>Status:</h4>
+    </div>
+    <div class="col-3">
+        <h4>Change status:</h4>
+    </div>
+{% for user in users %}
+
+    <div class="col-6 users">{{ user['username'] }}</div>
+    <div class="col-3 users">
+        {% if user['status'] == 0 %}
+            User
+        {% elif user['status'] == 1 %}
+            Editor
+        {% elif user['status'] == 2 %}
+            Admin
+        {% else %}
+        Owner
+        {% endif %}
+    </div>
+    <div class="col-3 users">Change</div>
+
+{% endfor %}
+</div>
+
+{% endblock %}

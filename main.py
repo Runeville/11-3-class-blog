@@ -25,10 +25,11 @@ def load_user(user_id):
 get_posts = Post.query.all()
 posts = []
 for post in get_posts:
+    author = User.query.filter_by(id=post.author).first()  # Finding an author
     posts.append({
         'title': post.title,
         'content': post.content,
-        'author': post.author,
+        'author': author.username,
         'date': post.date.strftime("%d.%m.%Y")
     })
 
@@ -85,6 +86,12 @@ def login():
 def logout():
     logout_user()
     return redirect("/login")
+
+
+@app.route('/users')
+def users():
+    users = User.query.all()
+    return render_template("blog/users.html", users=users)
 
 
 @app.route('/add_post')

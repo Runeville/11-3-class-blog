@@ -37,3 +37,7 @@ article {
 .author {
     color: gray;
 }
+
+.users {
+    font-size: 1.3rem;
+}

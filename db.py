@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     login = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
     username = db.Column(db.String(40), nullable=False)
+    status = db.Column(db.Integer, nullable=False, default=0)
 
     def __repr__(self):
         return f"{self.username}"
@@ -27,5 +28,6 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"{self.title}"
+
 
 db.create_all()
