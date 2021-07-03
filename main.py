@@ -1,5 +1,4 @@
 from flask import Flask, render_template, session, redirect, url_for
-from functools import wraps
 from flask_bootstrap import Bootstrap
 from db import *
 from auth import *
@@ -37,8 +36,6 @@ for post in get_posts:
 @app.route('/')
 @redirect_unauthorized
 def home():
-    # if current_user.is_active is False:
-    #     return redirect('/login')
     return render_template("blog/index.html", posts=posts)
 
 
