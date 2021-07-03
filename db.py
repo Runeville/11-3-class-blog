@@ -1,13 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from __init__ import app
+from flask_login import LoginManager, UserMixin
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///blog_database.db"
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
