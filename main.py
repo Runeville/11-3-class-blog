@@ -4,6 +4,7 @@ from db import *
 from auth import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, current_user, logout_user, login_user
+from forms import *
 
 Bootstrap(app)
 app.secret_key = "h4lLUI7i&*"
@@ -17,26 +18,19 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# new_post = Post(title="title", author=1, content="sdfsaf")
-# db.session.add(new_post)
-# db.session.commit()
-
-
-get_posts = Post.query.all()
-posts = []
-for post in get_posts:
-    author = User.query.filter_by(id=post.author).first()  # Finding an author
-    posts.append({
-        'title': post.title,
-        'content': post.content,
-        'author': author.username,
-        'date': post.date.strftime("%d.%m.%Y")
-    })
-
-
 @app.route('/')
-@redirect_unauthorized
+# @redirect_unauthorized
 def home():
+    get_posts = Post.query.order_by(Post.id.desc()).all()
+    posts = []  # Getting all posts
+    for post in get_posts:  # Getting all posts
+        author = User.query.filter_by(id=post.author).first()  # Finding an author
+        posts.append({
+            'title': post.title,
+            'content': post.content,
+            'author': author.username,
+            'date': post.date.strftime("%d.%m.%Y")
+        })
     return render_template("blog/index.html", posts=posts)
 
 
@@ -89,14 +83,24 @@ def logout():
 
 
 @app.route('/users')
+@redirect_unauthorized
 def users():
     users = User.query.all()
     return render_template("blog/users.html", users=users)
 
 
-@app.route('/add_post')
+@app.route('/add_post', methods=["POST", "GET"])
+@redirect_unauthorized
 def add_post():
-    return "Add post"
+    form = AddPostForm()
+
+    if form.validate_on_submit():
+        new_post = Post(title=form.title.data, author=current_user.id, content=form.content.data)  # Adding new post
+        db.session.add(new_post)
+        db.session.commit()  # Committing new post to DB
+        return redirect('/')
+
+    return render_template("blog/add_post.html", form=form)
 
 
 if __name__ == "__main__":
