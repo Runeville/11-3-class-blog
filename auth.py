@@ -22,9 +22,9 @@ class LoginForm(FlaskForm):
 def redirect_unauthorized(function):
     @wraps(function)
     def wrapper(*args, **kwargs):
-        function()
         if current_user.is_active is False:
             return redirect('/login')
         else:
             return function(*args, **kwargs)
+
     return wrapper

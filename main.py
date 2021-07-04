@@ -19,7 +19,7 @@ def load_user(user_id):
 
 
 @app.route('/')
-# @redirect_unauthorized
+@redirect_unauthorized
 def home():
     get_posts = Post.query.order_by(Post.id.desc()).all()
     posts = []  # Getting all posts
