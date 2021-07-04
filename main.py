@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, current_user, logout_user, login_user
 from forms import *
 
+
 Bootstrap(app)
 app.secret_key = "h4lLUI7i&*"
 
@@ -26,6 +27,7 @@ def home():
     for post in get_posts:  # Getting all posts
         author = User.query.filter_by(id=post.author).first()  # Finding an author
         posts.append({
+            'id': post.id,
             'title': post.title,
             'content': post.content,
             'author': author.username,
@@ -93,6 +95,39 @@ def users():
 @redirect_unauthorized
 @redirect_with_status(1)
 def add_post():
+    form = AddPostForm()
+
+    if form.validate_on_submit():
+        new_post = Post(title=form.title.data, author=current_user.id, content=form.content.data)  # Adding new post
+        db.session.add(new_post)
+        db.session.commit()  # Committing new post to DB
+        return redirect('/')
+
+    return render_template("blog/add_post.html", form=form)
+
+
+@app.route('/update_post/<int:post>', methods=["POST", "GET"])
+def update_post(post):
+    post = Post.query.filter_by(id=post).first()
+    if not current_user.is_active or current_user.id != post.author:
+        return redirect('/')
+
+    form = UpdatePostForm(title=post.title, content=post.content)
+
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+
+        db.session.commit()  # Committing new post to DB
+        return redirect('/')
+
+    return render_template("blog/update_post.html", form=form)
+
+
+@app.route('/delete_post', methods=["POST", "GET"])
+@redirect_unauthorized
+@redirect_with_status(1)
+def delete_post():
     form = AddPostForm()
 
     if form.validate_on_submit():

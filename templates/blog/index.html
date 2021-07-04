@@ -3,7 +3,9 @@
 {% block content %}
 <div class="row">
     <div class="col">
+        {% if current_user['status'] > 0 %}
         <a href="{{ url_for('add_post') }}" class="btn btn-info">Add new Post</a>
+        {% endif %}
     </div>
     <div class="col search">
         <input class="ms-auto" type="button" value="Search">
@@ -17,6 +19,12 @@
     <p class="date"><i>Date: {{ post['date'] }}</i></p>
     <p class="content">{{ post['content'] }}</p>
     <p class="author">Author: {{ post['author'] }}</p>
+    {% if current_user['status'] > 0 and current_user['username'] == post['author'] %}
+        <a href="/update_post/{{ post['id'] }}" class="btn btn-outline-info">Update post</a>
+    {% endif %}
+    {% if current_user['status'] > 1 or current_user['username'] == post['author'] and current_user['status'] > 0 %}
+        <a href="{{ url_for('delete_post') }}" class="btn btn-outline-danger">Delete post</a>
+    {% endif %}
 </article>
 
 <hr>
