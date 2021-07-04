@@ -5,6 +5,7 @@ from auth import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, current_user, logout_user, login_user
 from forms import *
+from datetime import datetime
 
 
 Bootstrap(app)
@@ -26,12 +27,19 @@ def home():
     posts = []  # Getting all posts
     for post in get_posts:  # Getting all posts
         author = User.query.filter_by(id=post.author).first()  # Finding an author
+
+        try:  # Catching update_date if exist
+            update_date = post.update_date.strftime("%d.%m.%Y")
+        except AttributeError:
+            update_date = None
+
         posts.append({
             'id': post.id,
             'title': post.title,
             'content': post.content,
             'author': author.username,
-            'date': post.date.strftime("%d.%m.%Y")
+            'date': post.date.strftime("%d.%m.%Y"),
+            'update_date': update_date
         })
     return render_template("blog/index.html", posts=posts)
 
@@ -117,6 +125,7 @@ def update_post(post):
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
+        post.update_date = datetime.utcnow()
 
         db.session.commit()  # Committing new post to DB
         return redirect('/')
@@ -124,19 +133,15 @@ def update_post(post):
     return render_template("blog/update_post.html", form=form)
 
 
-@app.route('/delete_post', methods=["POST", "GET"])
-@redirect_unauthorized
-@redirect_with_status(1)
-def delete_post():
-    form = AddPostForm()
+@app.route('/delete_post/<int:post>')
+def delete_post(post):
+    post = Post.query.filter_by(id=post).first()
 
-    if form.validate_on_submit():
-        new_post = Post(title=form.title.data, author=current_user.id, content=form.content.data)  # Adding new post
-        db.session.add(new_post)
-        db.session.commit()  # Committing new post to DB
-        return redirect('/')
+    if current_user.is_active and current_user.status > 1 or current_user.id == post.author and current_user.status > 0:
+        db.session.delete(post)
+        db.session.commit()
 
-    return render_template("blog/add_post.html", form=form)
+    return redirect('/')
 
 
 if __name__ == "__main__":

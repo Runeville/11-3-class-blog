@@ -24,7 +24,8 @@ class Post(db.Model):
     author = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    update_date = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
         return f"{self.title}"

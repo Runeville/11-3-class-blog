@@ -17,13 +17,16 @@
 <article>
     <h2 class="text-center">{{ post['title'] }}</h2>
     <p class="date"><i>Date: {{ post['date'] }}</i></p>
+    {% if post['update_date'] %}
+        <p class="update-date"><i>Updated: {{ post['update_date'] }}</i></p>
+    {% endif %}
     <p class="content">{{ post['content'] }}</p>
     <p class="author">Author: {{ post['author'] }}</p>
     {% if current_user['status'] > 0 and current_user['username'] == post['author'] %}
         <a href="/update_post/{{ post['id'] }}" class="btn btn-outline-info">Update post</a>
     {% endif %}
     {% if current_user['status'] > 1 or current_user['username'] == post['author'] and current_user['status'] > 0 %}
-        <a href="{{ url_for('delete_post') }}" class="btn btn-outline-danger">Delete post</a>
+        <a href="/delete_post/{{ post['id'] }}" class="btn btn-outline-danger">Delete post</a>
     {% endif %}
 </article>
 

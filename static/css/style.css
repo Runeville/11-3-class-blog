@@ -34,6 +34,11 @@ article {
     margin-left: 2rem;
 }
 
+.update-date {
+    color: gray;
+    font-size: 0.9rem
+}
+
 .author {
     color: gray;
 }
