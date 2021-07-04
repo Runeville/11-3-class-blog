@@ -1,3 +1,4 @@
+from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from __init__ import app
@@ -29,6 +30,45 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"{self.title}"
+
+
+def search_posts():
+    """ Return all posts depending on search GET request """
+    get_posts = Post.query.order_by(Post.id.desc()).all()
+    posts = []  # Getting all posts
+    if request.args.get('search') is None:
+        for post in get_posts:  # Getting all posts
+            author = User.query.filter_by(id=post.author).first()  # Finding an author
+
+            try:  # Catching update_date if exist
+                update_date = post.update_date.strftime("%d.%m.%Y")
+            except AttributeError:
+                update_date = None
+            posts.append({
+                'id': post.id,
+                'title': post.title,
+                'content': post.content,
+                'author': author.username,
+                'date': post.date.strftime("%d.%m.%Y"),
+                'update_date': update_date
+            })
+    else:
+        for post in get_posts:  # Getting all posts
+            author = User.query.filter_by(id=post.author).first()  # Finding an author
+            try:  # Catching update_date if exist
+                update_date = post.update_date.strftime("%d.%m.%Y")
+            except AttributeError:
+                update_date = None
+            if post.title.find(request.args.get('search')) >= 0:
+                posts.append({
+                    'id': post.id,
+                    'title': post.title,
+                    'content': post.content,
+                    'author': author.username,
+                    'date': post.date.strftime("%d.%m.%Y"),
+                    'update_date': update_date
+                })
+    return posts
 
 
 db.create_all()
