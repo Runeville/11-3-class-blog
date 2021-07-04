@@ -91,6 +91,7 @@ def users():
 
 @app.route('/add_post', methods=["POST", "GET"])
 @redirect_unauthorized
+@redirect_with_status(1)
 def add_post():
     form = AddPostForm()
 

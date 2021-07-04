@@ -28,3 +28,16 @@ def redirect_unauthorized(function):
             return function(*args, **kwargs)
 
     return wrapper
+
+
+def redirect_with_status(argument):
+    def decorator(function):
+        @wraps(function)
+        def wrapper():
+            if current_user.status < argument:
+                return redirect('/')
+            else:
+                return function()
+
+        return wrapper
+    return decorator
