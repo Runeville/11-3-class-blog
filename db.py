@@ -1,10 +1,12 @@
+import os
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from __init__ import app
 from flask_login import UserMixin
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///blog_database.db"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///blog_database.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///blog_database.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 

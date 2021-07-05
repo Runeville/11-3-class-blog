@@ -11,7 +11,7 @@ from datetime import datetime
 
 
 Bootstrap(app)
-app.secret_key = "h4lLUI7i&*"
+app.config["SECRET_KEY"] = "h4lLUI7i&*"
 
 UPLOAD_FOLDER = '/static/images/'
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
