@@ -157,6 +157,13 @@ def update_post(post):
     form = UpdatePostForm(title=post.title, content=post.content)
 
     if form.validate_on_submit():
+        file = form.image.data
+        filename = secure_filename(file.filename)
+        if filename:
+            path = os.getcwd().replace("\\", "/")
+            file.save(path + app.config['UPLOAD_FOLDER'] + filename)
+            post.image = filename
+
         post.title = form.title.data
         post.content = form.content.data
         post.update_date = datetime.utcnow()
