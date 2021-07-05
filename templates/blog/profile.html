@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+  {{ super() }}
+  <style>
+    .help-block { color: red; }
+  </style>
+{% endblock %}
+
+{% block content %}
+
+{{ wtf.quick_form(username_form, novalidate=True) }}
+
+<hr>
+
+{{ wtf.quick_form(password_form, novalidate=True) }}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li style="list-style: none; color: red;">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+{% endblock %}

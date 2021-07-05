@@ -71,7 +71,6 @@ def login():
         except AttributeError:
             flash("No such user registered")
 
-
     return render_template("auth/login.html", form=login_form)
 
 
@@ -97,6 +96,26 @@ def users():
         db.session.commit()
 
     return render_template("blog/users.html", users=users)
+
+
+@app.route('/profile', methods=["POST", "GET"])
+@redirect_unauthorized
+def profile():
+    username_form = UpdateProfileForm(username=current_user.username)
+    password_form = UpdatePasswordForm()
+
+    if username_form.validate_on_submit():
+        current_user.username = username_form.username.data
+        db.session.commit()
+
+    if password_form.validate_on_submit():
+        if check_password_hash(current_user.password, password_form.password.data):
+            current_user.password = generate_password_hash(password_form.new_password.data)
+            db.session.commit()
+        else:
+            flash("Incorrect old password")
+
+    return render_template("blog/profile.html", username_form=username_form, password_form=password_form)
 
 
 @app.route('/add_post', methods=["POST", "GET"])
