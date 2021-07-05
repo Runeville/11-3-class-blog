@@ -21,6 +21,11 @@ login_manager = LoginManager(app)
 login_manager.init_app(app)
 
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -133,7 +138,7 @@ def add_post():
     if form.validate_on_submit():
         file = form.image.data
         filename = secure_filename(file.filename)
-        if filename:
+        if allowed_file(filename):
             path = os.getcwd().replace("\\", "/")
             file.save(path + app.config['UPLOAD_FOLDER'] + filename)
             new_post = Post(title=form.title.data, author=current_user.id,
@@ -159,7 +164,7 @@ def update_post(post):
     if form.validate_on_submit():
         file = form.image.data
         filename = secure_filename(file.filename)
-        if filename:
+        if allowed_file(filename):
             path = os.getcwd().replace("\\", "/")
             file.save(path + app.config['UPLOAD_FOLDER'] + filename)
             post.image = filename

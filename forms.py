@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, PasswordField, FileField
-from wtforms.validators import DataRequired, Length, EqualTo
+from wtforms.validators import DataRequired, Length, EqualTo, Regexp
 
 
 class AddPostForm(FlaskForm):
@@ -13,7 +13,7 @@ class AddPostForm(FlaskForm):
 class UpdatePostForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     content = TextAreaField("Content", validators=[DataRequired(), Length(min=10)])
-    image = FileField("Images")
+    image = FileField("Images", validators=[Regexp(r"\S+\.jpg")])
     submit = SubmitField("Update post")
 
 
