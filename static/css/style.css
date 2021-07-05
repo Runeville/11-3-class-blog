@@ -17,6 +17,10 @@
     max-width: 800px;
 }
 
+.btn-info {
+    color: white
+}
+
  /*  Search posts  */
 .search {
     position: relative;
