@@ -51,7 +51,8 @@ def search_posts():
                 'content': post.content,
                 'author': author.username,
                 'date': post.date.strftime("%d.%m.%Y"),
-                'update_date': update_date
+                'update_date': update_date,
+                'image': post.image
             })
     else:
         for post in get_posts:  # Getting all posts

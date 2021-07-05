@@ -23,6 +23,9 @@
         <p class="update-date"><i>Updated: {{ post['update_date'] }}</i></p>
     {% endif %}
     <p class="content">{{ post['content'] }}</p>
+    {% if post['image'] %}
+    <div><img src="{{ url_for('static', filename='images/' + post['image']) }}" alt="IMAGE" class="img-fluid"></div>
+    {% endif %}
     <p class="author">Author: {{ post['author'] }}</p>
     {% if current_user['status'] > 0 and current_user['username'] == post['author'] %}
         <a href="/update_post/{{ post['id'] }}" class="btn btn-outline-info">Update post</a>

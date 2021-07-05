@@ -13,7 +13,7 @@ class AddPostForm(FlaskForm):
 class UpdatePostForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     content = TextAreaField("Content", validators=[DataRequired(), Length(min=10)])
-    image = FileField("Images", validators=[Regexp(r"\S+\.jpg")])
+    image = FileField("Images")
     submit = SubmitField("Update post")
 
 
