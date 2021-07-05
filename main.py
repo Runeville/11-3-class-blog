@@ -1,8 +1,10 @@
+import os
 from flask import Flask, render_template, session, redirect, url_for, request, flash
 from flask_bootstrap import Bootstrap
 from db import *
 from auth import *
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_required, current_user, logout_user, login_user
 from forms import *
 from datetime import datetime
@@ -10,6 +12,10 @@ from datetime import datetime
 
 Bootstrap(app)
 app.secret_key = "h4lLUI7i&*"
+
+UPLOAD_FOLDER = '/static/images/'
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 login_manager = LoginManager(app)
 login_manager.init_app(app)
@@ -125,7 +131,16 @@ def add_post():
     form = AddPostForm()
 
     if form.validate_on_submit():
-        new_post = Post(title=form.title.data, author=current_user.id, content=form.content.data)  # Adding new post
+        file = form.image.data
+        filename = secure_filename(file.filename)
+        if filename:
+            path = os.getcwd().replace("\\", "/")
+            file.save(path + app.config['UPLOAD_FOLDER'] + filename)
+            new_post = Post(title=form.title.data, author=current_user.id,
+                            content=form.content.data, image=filename)  # Adding new post
+        else:
+            new_post = Post(title=form.title.data, author=current_user.id,
+                            content=form.content.data)  # Adding new post
         db.session.add(new_post)
         db.session.commit()  # Committing new post to DB
         return redirect('/')

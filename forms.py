@@ -1,13 +1,12 @@
 from flask_wtf import FlaskForm
-from flask_login import current_user
-from wtforms import StringField, SubmitField, TextAreaField, PasswordField
-from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
-from werkzeug.security import check_password_hash
+from wtforms import StringField, SubmitField, TextAreaField, PasswordField, FileField
+from wtforms.validators import DataRequired, Length, EqualTo
 
 
 class AddPostForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     content = TextAreaField("Content", validators=[DataRequired(), Length(min=10)])
+    image = FileField("Images")
     submit = SubmitField("Create post")
 
 
@@ -23,7 +22,6 @@ class UpdateProfileForm(FlaskForm):
 
 
 class UpdatePasswordForm(FlaskForm):
-
     password = PasswordField("Current password", validators=[DataRequired()])
     new_password = PasswordField("New password", validators=[DataRequired(), Length(min=8)])
     new_password_confirm = PasswordField("Confirm password",
