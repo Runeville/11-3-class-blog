@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, request
+from flask import Flask, render_template, session, redirect, url_for, request, flash
 from flask_bootstrap import Bootstrap
 from db import *
 from auth import *
@@ -48,23 +48,29 @@ def register():
             login_user(new_user, remember=True)
             return redirect(url_for("home"))
         else:
-            print("This login is already used")
+            flash("This login is already used")
 
     return render_template("auth/register.html", form=register_form)
 
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
-    if current_user.is_active is True:
+    if current_user.is_active:
         return redirect('/')
 
     login_form = LoginForm()
 
     if login_form.validate_on_submit():
-        user = User.query.filter_by(login=login_form.login.data).first()  # user = user found by login in DB
-        if check_password_hash(user.password, login_form.password.data):  # Check if password is correct
-            login_user(user, remember=True)
-            return redirect('/')
+        try:
+            user = User.query.filter_by(login=login_form.login.data).first()  # user = user found by login in DB
+            if check_password_hash(user.password, login_form.password.data):  # Check if password is correct
+                login_user(user, remember=True)
+                return redirect('/')
+            else:
+                flash("Incorrect password")
+        except AttributeError:
+            flash("No such user registered")
+
 
     return render_template("auth/login.html", form=login_form)
 

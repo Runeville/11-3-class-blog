@@ -7,6 +7,15 @@
   transform: translateY(-50%);
   top: 40%; left: 30%">
     {{ wtf.quick_form(form, novalidate=True) }}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li style="list-style: none; color: red;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
     <a href="{{ url_for('login') }}">Already have an account?</a>
 </div>
 
