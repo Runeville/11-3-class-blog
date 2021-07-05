@@ -81,10 +81,21 @@ def logout():
     return redirect("/login")
 
 
-@app.route('/users')
+@app.route('/users', methods=["POST", "GET"])
 @redirect_unauthorized
 def users():
     users = User.query.all()
+
+    # If request method is POST change user status to selected
+    if request.method == "POST":
+        user_id = int(list(request.form.keys())[0])
+        changed_status = int(request.form[str(user_id)])  # Return number of updated status
+
+        user = User.query.filter_by(id=user_id).first()
+        user.status = changed_status
+
+        db.session.commit()
+
     return render_template("blog/users.html", users=users)
 
 

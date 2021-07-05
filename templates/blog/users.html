@@ -26,7 +26,20 @@
         Owner
         {% endif %}
     </div>
-    <div class="col-3 users">Change</div>
+    <div class="col-3 users">
+        {% if current_user['id'] != user['id'] %}
+            <form action="" method="post">
+                <select name="{{ user['id'] }}">
+                    <option value="0">User</option>
+                    <option {% if user['status'] == 1 %} selected  {% endif %} value="1">Editor</option>
+                    {% if current_user['status'] > 2 %}
+                    <option {% if user['status'] == 2 %} selected  {% endif %} value="2">Admin</option>
+                    {% endif %}
+                </select>
+                <input type="submit" value="Change">
+            </form>
+        {% endif %}
+    </div>
 
 {% endfor %}
 </div>
