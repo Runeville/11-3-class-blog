@@ -191,4 +191,4 @@ def delete_post(post):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
