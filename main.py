@@ -140,8 +140,8 @@ def add_post():
         filename = secure_filename(file.filename)
         if allowed_file(filename):
             path = os.getcwd().replace("\\", "/")
-            return path + app.config['UPLOAD_FOLDER'] + filename
             file.save(path + app.config['UPLOAD_FOLDER'] + filename)
+            return path + app.config['UPLOAD_FOLDER'] + filename
             new_post = Post(title=form.title.data, author=current_user.id,
                             content=form.content.data, image=filename)  # Adding new post
         else:
