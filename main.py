@@ -1,11 +1,11 @@
 import os
-from flask import Flask, render_template, session, redirect, url_for, request, flash
+from flask import render_template, url_for, flash
 from flask_bootstrap import Bootstrap
 from db import *
 from auth import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from flask_login import LoginManager, login_required, current_user, logout_user, login_user
+from flask_login import LoginManager, current_user, logout_user, login_user
 from forms import *
 from datetime import datetime
 

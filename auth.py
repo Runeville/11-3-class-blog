@@ -3,7 +3,7 @@ from functools import wraps
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length
-from flask_login import LoginManager, login_required, current_user, logout_user, login_user
+from flask_login import current_user
 
 
 class RegisterForm(FlaskForm):
